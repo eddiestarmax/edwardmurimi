@@ -1,0 +1,1196 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "93bedace",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: textblob in ./project_env/lib/python3.8/site-packages (0.15.3)\n",
+      "Requirement already satisfied: nltk>=3.1 in ./project_env/lib/python3.8/site-packages (from textblob) (3.5)\n",
+      "Requirement already satisfied: click in ./project_env/lib/python3.8/site-packages (from nltk>=3.1->textblob) (7.1.2)\n",
+      "Requirement already satisfied: regex in ./project_env/lib/python3.8/site-packages (from nltk>=3.1->textblob) (2021.3.17)\n",
+      "Requirement already satisfied: joblib in ./project_env/lib/python3.8/site-packages (from nltk>=3.1->textblob) (1.0.1)\n",
+      "Requirement already satisfied: tqdm in ./project_env/lib/python3.8/site-packages (from nltk>=3.1->textblob) (4.59.0)\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install textblob"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "7557a8fb",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: tweepy in ./project_env/lib/python3.8/site-packages (3.10.0)\n",
+      "Requirement already satisfied: six>=1.10.0 in ./project_env/lib/python3.8/site-packages (from tweepy) (1.15.0)\n",
+      "Requirement already satisfied: requests-oauthlib>=0.7.0 in ./project_env/lib/python3.8/site-packages (from tweepy) (1.3.0)\n",
+      "Requirement already satisfied: requests[socks]>=2.11.1 in ./project_env/lib/python3.8/site-packages (from tweepy) (2.25.1)\n",
+      "Requirement already satisfied: oauthlib>=3.0.0 in ./project_env/lib/python3.8/site-packages (from requests-oauthlib>=0.7.0->tweepy) (3.1.0)\n",
+      "Requirement already satisfied: certifi>=2017.4.17 in ./project_env/lib/python3.8/site-packages (from requests[socks]>=2.11.1->tweepy) (2020.12.5)\n",
+      "Requirement already satisfied: idna<3,>=2.5 in ./project_env/lib/python3.8/site-packages (from requests[socks]>=2.11.1->tweepy) (2.10)\n",
+      "Requirement already satisfied: urllib3<1.27,>=1.21.1 in ./project_env/lib/python3.8/site-packages (from requests[socks]>=2.11.1->tweepy) (1.26.4)\n",
+      "Requirement already satisfied: chardet<5,>=3.0.2 in ./project_env/lib/python3.8/site-packages (from requests[socks]>=2.11.1->tweepy) (4.0.0)\n",
+      "Requirement already satisfied: PySocks!=1.5.7,>=1.5.6; extra == \"socks\" in ./project_env/lib/python3.8/site-packages (from requests[socks]>=2.11.1->tweepy) (1.7.1)\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install tweepy\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "2f04b1f8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from textblob import TextBlob"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "8a768342",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import sys\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "3fc8c604",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import tweepy"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "6060f5bf",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: matplotlib in ./project_env/lib/python3.8/site-packages (3.4.1)\n",
+      "Requirement already satisfied: kiwisolver>=1.0.1 in ./project_env/lib/python3.8/site-packages (from matplotlib) (1.3.1)\n",
+      "Requirement already satisfied: cycler>=0.10 in ./project_env/lib/python3.8/site-packages (from matplotlib) (0.10.0)\n",
+      "Requirement already satisfied: python-dateutil>=2.7 in ./project_env/lib/python3.8/site-packages (from matplotlib) (2.8.1)\n",
+      "Requirement already satisfied: pyparsing>=2.2.1 in ./project_env/lib/python3.8/site-packages (from matplotlib) (2.4.7)\n",
+      "Requirement already satisfied: numpy>=1.16 in ./project_env/lib/python3.8/site-packages (from matplotlib) (1.20.2)\n",
+      "Requirement already satisfied: pillow>=6.2.0 in ./project_env/lib/python3.8/site-packages (from matplotlib) (8.2.0)\n",
+      "Requirement already satisfied: six in ./project_env/lib/python3.8/site-packages (from cycler>=0.10->matplotlib) (1.15.0)\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install matplotlib"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "b614f553",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import matplotlib.pyplot as plt"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "f3f5781b",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: pandas in ./project_env/lib/python3.8/site-packages (1.2.3)\n",
+      "Requirement already satisfied: numpy>=1.16.5 in ./project_env/lib/python3.8/site-packages (from pandas) (1.20.2)\n",
+      "Requirement already satisfied: pytz>=2017.3 in ./project_env/lib/python3.8/site-packages (from pandas) (2021.1)\n",
+      "Requirement already satisfied: python-dateutil>=2.7.3 in ./project_env/lib/python3.8/site-packages (from pandas) (2.8.1)\n",
+      "Requirement already satisfied: six>=1.5 in ./project_env/lib/python3.8/site-packages (from python-dateutil>=2.7.3->pandas) (1.15.0)\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install pandas"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "0126079d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "af28c620",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import os"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "fc5784c7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import nltk\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "id": "a61fa1dc",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: pycountry in ./project_env/lib/python3.8/site-packages (20.7.3)\r\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install pycountry"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "e1bae6c2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pycountry"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "id": "975e5f1d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import re"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "id": "c19c41f7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import string"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "id": "e6f041ca",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: wordcloud in ./project_env/lib/python3.8/site-packages (1.8.1)\n",
+      "Requirement already satisfied: matplotlib in ./project_env/lib/python3.8/site-packages (from wordcloud) (3.4.1)\n",
+      "Requirement already satisfied: pillow in ./project_env/lib/python3.8/site-packages (from wordcloud) (8.2.0)\n",
+      "Requirement already satisfied: numpy>=1.6.1 in ./project_env/lib/python3.8/site-packages (from wordcloud) (1.20.2)\n",
+      "Requirement already satisfied: python-dateutil>=2.7 in ./project_env/lib/python3.8/site-packages (from matplotlib->wordcloud) (2.8.1)\n",
+      "Requirement already satisfied: pyparsing>=2.2.1 in ./project_env/lib/python3.8/site-packages (from matplotlib->wordcloud) (2.4.7)\n",
+      "Requirement already satisfied: kiwisolver>=1.0.1 in ./project_env/lib/python3.8/site-packages (from matplotlib->wordcloud) (1.3.1)\n",
+      "Requirement already satisfied: cycler>=0.10 in ./project_env/lib/python3.8/site-packages (from matplotlib->wordcloud) (0.10.0)\n",
+      "Requirement already satisfied: six>=1.5 in ./project_env/lib/python3.8/site-packages (from python-dateutil>=2.7->matplotlib->wordcloud) (1.15.0)\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install wordcloud"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "id": "f9eb023a",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: wordcloud in ./project_env/lib/python3.8/site-packages (1.8.1)\n",
+      "Requirement already satisfied: matplotlib in ./project_env/lib/python3.8/site-packages (from wordcloud) (3.4.1)\n",
+      "Requirement already satisfied: numpy>=1.6.1 in ./project_env/lib/python3.8/site-packages (from wordcloud) (1.20.2)\n",
+      "Requirement already satisfied: pillow in ./project_env/lib/python3.8/site-packages (from wordcloud) (8.2.0)\n",
+      "Requirement already satisfied: python-dateutil>=2.7 in ./project_env/lib/python3.8/site-packages (from matplotlib->wordcloud) (2.8.1)\n",
+      "Requirement already satisfied: pyparsing>=2.2.1 in ./project_env/lib/python3.8/site-packages (from matplotlib->wordcloud) (2.4.7)\n",
+      "Requirement already satisfied: kiwisolver>=1.0.1 in ./project_env/lib/python3.8/site-packages (from matplotlib->wordcloud) (1.3.1)\n",
+      "Requirement already satisfied: cycler>=0.10 in ./project_env/lib/python3.8/site-packages (from matplotlib->wordcloud) (0.10.0)\n",
+      "Requirement already satisfied: six>=1.5 in ./project_env/lib/python3.8/site-packages (from python-dateutil>=2.7->matplotlib->wordcloud) (1.15.0)\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install wordcloud"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "29fabbb3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from wordcloud import WordCloud, STOPWORDS"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "b0c05ade",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from PIL import Image"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "a50776f0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from nltk.sentiment.vader import SentimentIntensityAnalyzer\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "7613cb7f",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: langdetect in ./project_env/lib/python3.8/site-packages (1.0.8)\r\n",
+      "Requirement already satisfied: six in ./project_env/lib/python3.8/site-packages (from langdetect) (1.15.0)\r\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install langdetect"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "e3773dc8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from langdetect import detect\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "10c0ed1e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "58c11cd7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pycountry\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "44ae4f26",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from langdetect import detect"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "id": "6d970e18",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from nltk.stem import SnowballStemmer"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "id": "72e5c5b3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from nltk.sentiment.vader import SentimentIntensityAnalyzer"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "id": "a1d23de1",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: sklearn in ./project_env/lib/python3.8/site-packages (0.0)\n",
+      "Requirement already satisfied: scikit-learn in ./project_env/lib/python3.8/site-packages (from sklearn) (0.24.1)\n",
+      "Requirement already satisfied: scipy>=0.19.1 in ./project_env/lib/python3.8/site-packages (from scikit-learn->sklearn) (1.6.2)\n",
+      "Requirement already satisfied: threadpoolctl>=2.0.0 in ./project_env/lib/python3.8/site-packages (from scikit-learn->sklearn) (2.1.0)\n",
+      "Requirement already satisfied: numpy>=1.13.3 in ./project_env/lib/python3.8/site-packages (from scikit-learn->sklearn) (1.20.2)\n",
+      "Requirement already satisfied: joblib>=0.11 in ./project_env/lib/python3.8/site-packages (from scikit-learn->sklearn) (1.0.1)\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install sklearn"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "id": "47a50f59",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "consumerKey = \"KkFRbQpwS8JncbWNnM0v8BV78\"\n",
+    "consumerSecret = \"70xy7O72aLTx1hX3vqCGRpezhYYBqQaCKyLhO05mhTb1oH0Ceq\"\n",
+    "accessToken = \"1183387752-PvTJTXRS8MZVaTkAlcLGWxo71j4Iz3xUNbLia4w\"\n",
+    "accessTokenSecret = \"x0nMDC15uin9l5ZQlu1byqGaXkrD3bSkENIi1hOwJlCkn\"\n",
+    "\n",
+    "auth = tweepy.OAuthHandler(consumerKey, consumerSecret)\n",
+    "auth.set_access_token(accessToken, accessTokenSecret)\n",
+    "api = tweepy.API(auth)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "id": "474d689f",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Please enter keyword or hashtag to search: #RIPCovidVictims\n",
+      "Please enter how many tweets to analyze: 20\n"
+     ]
+    }
+   ],
+   "source": [
+    "#Sentiment Analysis\n",
+    "\n",
+    "def percentage(part,whole):\n",
+    "    return 100 * float(part)/float(whole) \n",
+    "\n",
+    "keyword = input(\"Please enter keyword or hashtag to search: \")\n",
+    "noOfTweet = int(input (\"Please enter how many tweets to analyze: \"))\n",
+    "\n",
+    "\n",
+    "tweets = tweepy.Cursor(api.search, q=keyword).items(noOfTweet)\n",
+    "positive  = 0\n",
+    "negative = 0\n",
+    "neutral = 0\n",
+    "polarity = 0\n",
+    "tweet_list = []\n",
+    "neutral_list = []\n",
+    "negative_list = []\n",
+    "positive_list = []\n",
+    "\n",
+    "for tweet in tweets:\n",
+    "    \n",
+    "    #print(tweet.text)\n",
+    "    tweet_list.append(tweet.text)\n",
+    "    analysis = TextBlob(tweet.text)\n",
+    "    score = SentimentIntensityAnalyzer().polarity_scores(tweet.text)\n",
+    "    neg = score['neg']\n",
+    "    neu = score['neu']\n",
+    "    pos = score['pos']\n",
+    "    comp = score['compound']\n",
+    "    polarity += analysis.sentiment.polarity\n",
+    "    \n",
+    "    if neg > pos:\n",
+    "        negative_list.append(tweet.text)\n",
+    "        negative += 1\n",
+    "\n",
+    "    elif pos > neg:\n",
+    "        positive_list.append(tweet.text)\n",
+    "        positive += 1\n",
+    "    \n",
+    "    elif pos == neg:\n",
+    "        neutral_list.append(tweet.text)\n",
+    "        neutral += 1\n",
+    "\n",
+    "positive = percentage(positive, noOfTweet)\n",
+    "negative = percentage(negative, noOfTweet)\n",
+    "neutral = percentage(neutral, noOfTweet)\n",
+    "polarity = percentage(polarity, noOfTweet)\n",
+    "positive = format(positive, '.1f')\n",
+    "negative = format(negative, '.1f')\n",
+    "neutral = format(neutral, '.1f')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "id": "ec419b32",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "total number:  20\n",
+      "positive number:  10\n",
+      "negative number:  3\n",
+      "neutral number:  7\n"
+     ]
+    }
+   ],
+   "source": [
+    "#Number of Tweets (Total, Positive, Negative, Neutral)\n",
+    "tweet_list = pd.DataFrame(tweet_list)\n",
+    "neutral_list = pd.DataFrame(neutral_list)\n",
+    "negative_list = pd.DataFrame(negative_list)\n",
+    "positive_list = pd.DataFrame(positive_list)\n",
+    "print(\"total number: \",len(tweet_list))\n",
+    "print(\"positive number: \",len(positive_list))\n",
+    "print(\"negative number: \", len(negative_list))\n",
+    "print(\"neutral number: \",len(neutral_list))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "id": "58c8f0dc",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>0</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>RT @mtaabuzz: Man killed after walking into gi...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>RT @mtaabuzz: Man killed after walking into gi...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>RT @Okello_Kay: @I___amFinest @Liberal_KE Afri...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>RT @FelicitysolarKE: Felicity Solar LiFeP04 BA...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>RT @alberto_januzaj: We can never forget his c...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>RT @ollyrutto: HELLO GUYS, TEXT, CALL OR WHATS...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>Digital Comrade is FREE and Open marketplace f...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>RT @ollyrutto: HI, TEXT, CALL OR WHATSAPP TO 0...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>RT @mtaabuzz: Man killed after walking into gi...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>https://t.co/LLQcJzehN7\\n#GintasticEaster\\n#Ro...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>10</th>\n",
+       "      <td>RT @ollyrutto: HI, TEXT, CALL OR WHATSAPP TO 0...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>11</th>\n",
+       "      <td>RT @ItsNyambane: Robin Njogu was a consummate ...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>12</th>\n",
+       "      <td>RT @TheTomorrowTech: Sirui 50mm f/1.8 Anamorph...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>13</th>\n",
+       "      <td>RT @ollyrutto: HI, TEXT, CALL OR WHATSAPP TO 0...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>14</th>\n",
+       "      <td>RT @teddyeugene: To all those who have lost th...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>15</th>\n",
+       "      <td>HI, TEXT, CALL OR WHATSAPP TO 0701379754 FOR S...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>16</th>\n",
+       "      <td>RT @KeCamera: Canon EOS 80D DSLR Camera with 1...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>17</th>\n",
+       "      <td>Sirui 50mm f/1.8 Anamorphic 1.33x Lens (MFT Mo...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>18</th>\n",
+       "      <td>Canon EOS 80D DSLR Camera with 18-135mm Lens\\n...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19</th>\n",
+       "      <td>RT @ollyrutto: HELLO GUYS, TEXT, CALL OR WHATS...</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                                                    0\n",
+       "0   RT @mtaabuzz: Man killed after walking into gi...\n",
+       "1   RT @mtaabuzz: Man killed after walking into gi...\n",
+       "2   RT @Okello_Kay: @I___amFinest @Liberal_KE Afri...\n",
+       "3   RT @FelicitysolarKE: Felicity Solar LiFeP04 BA...\n",
+       "4   RT @alberto_januzaj: We can never forget his c...\n",
+       "5   RT @ollyrutto: HELLO GUYS, TEXT, CALL OR WHATS...\n",
+       "6   Digital Comrade is FREE and Open marketplace f...\n",
+       "7   RT @ollyrutto: HI, TEXT, CALL OR WHATSAPP TO 0...\n",
+       "8   RT @mtaabuzz: Man killed after walking into gi...\n",
+       "9   https://t.co/LLQcJzehN7\\n#GintasticEaster\\n#Ro...\n",
+       "10  RT @ollyrutto: HI, TEXT, CALL OR WHATSAPP TO 0...\n",
+       "11  RT @ItsNyambane: Robin Njogu was a consummate ...\n",
+       "12  RT @TheTomorrowTech: Sirui 50mm f/1.8 Anamorph...\n",
+       "13  RT @ollyrutto: HI, TEXT, CALL OR WHATSAPP TO 0...\n",
+       "14  RT @teddyeugene: To all those who have lost th...\n",
+       "15  HI, TEXT, CALL OR WHATSAPP TO 0701379754 FOR S...\n",
+       "16  RT @KeCamera: Canon EOS 80D DSLR Camera with 1...\n",
+       "17  Sirui 50mm f/1.8 Anamorphic 1.33x Lens (MFT Mo...\n",
+       "18  Canon EOS 80D DSLR Camera with 18-135mm Lens\\n...\n",
+       "19  RT @ollyrutto: HELLO GUYS, TEXT, CALL OR WHATS..."
+      ]
+     },
+     "execution_count": 37,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "tweet_list"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "id": "47e50093",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "tweet_list.drop_duplicates(inplace = True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "id": "af2bf930",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>0</th>\n",
+       "      <th>text</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>RT @mtaabuzz: Man killed after walking into gi...</td>\n",
+       "      <td>RT @mtaabuzz: Man killed after walking into gi...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>RT @Okello_Kay: @I___amFinest @Liberal_KE Afri...</td>\n",
+       "      <td>RT @Okello_Kay: @I___amFinest @Liberal_KE Afri...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>RT @FelicitysolarKE: Felicity Solar LiFeP04 BA...</td>\n",
+       "      <td>RT @FelicitysolarKE: Felicity Solar LiFeP04 BA...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>RT @alberto_januzaj: We can never forget his c...</td>\n",
+       "      <td>RT @alberto_januzaj: We can never forget his c...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>RT @ollyrutto: HELLO GUYS, TEXT, CALL OR WHATS...</td>\n",
+       "      <td>RT @ollyrutto: HELLO GUYS, TEXT, CALL OR WHATS...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>Digital Comrade is FREE and Open marketplace f...</td>\n",
+       "      <td>Digital Comrade is FREE and Open marketplace f...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>RT @ollyrutto: HI, TEXT, CALL OR WHATSAPP TO 0...</td>\n",
+       "      <td>RT @ollyrutto: HI, TEXT, CALL OR WHATSAPP TO 0...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>https://t.co/LLQcJzehN7\\n#GintasticEaster\\n#Ro...</td>\n",
+       "      <td>https://t.co/LLQcJzehN7\\n#GintasticEaster\\n#Ro...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>11</th>\n",
+       "      <td>RT @ItsNyambane: Robin Njogu was a consummate ...</td>\n",
+       "      <td>RT @ItsNyambane: Robin Njogu was a consummate ...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>12</th>\n",
+       "      <td>RT @TheTomorrowTech: Sirui 50mm f/1.8 Anamorph...</td>\n",
+       "      <td>RT @TheTomorrowTech: Sirui 50mm f/1.8 Anamorph...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>14</th>\n",
+       "      <td>RT @teddyeugene: To all those who have lost th...</td>\n",
+       "      <td>RT @teddyeugene: To all those who have lost th...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>15</th>\n",
+       "      <td>HI, TEXT, CALL OR WHATSAPP TO 0701379754 FOR S...</td>\n",
+       "      <td>HI, TEXT, CALL OR WHATSAPP TO 0701379754 FOR S...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>16</th>\n",
+       "      <td>RT @KeCamera: Canon EOS 80D DSLR Camera with 1...</td>\n",
+       "      <td>RT @KeCamera: Canon EOS 80D DSLR Camera with 1...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>17</th>\n",
+       "      <td>Sirui 50mm f/1.8 Anamorphic 1.33x Lens (MFT Mo...</td>\n",
+       "      <td>Sirui 50mm f/1.8 Anamorphic 1.33x Lens (MFT Mo...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>18</th>\n",
+       "      <td>Canon EOS 80D DSLR Camera with 18-135mm Lens\\n...</td>\n",
+       "      <td>Canon EOS 80D DSLR Camera with 18-135mm Lens\\n...</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                                                    0  \\\n",
+       "0   RT @mtaabuzz: Man killed after walking into gi...   \n",
+       "2   RT @Okello_Kay: @I___amFinest @Liberal_KE Afri...   \n",
+       "3   RT @FelicitysolarKE: Felicity Solar LiFeP04 BA...   \n",
+       "4   RT @alberto_januzaj: We can never forget his c...   \n",
+       "5   RT @ollyrutto: HELLO GUYS, TEXT, CALL OR WHATS...   \n",
+       "6   Digital Comrade is FREE and Open marketplace f...   \n",
+       "7   RT @ollyrutto: HI, TEXT, CALL OR WHATSAPP TO 0...   \n",
+       "9   https://t.co/LLQcJzehN7\\n#GintasticEaster\\n#Ro...   \n",
+       "11  RT @ItsNyambane: Robin Njogu was a consummate ...   \n",
+       "12  RT @TheTomorrowTech: Sirui 50mm f/1.8 Anamorph...   \n",
+       "14  RT @teddyeugene: To all those who have lost th...   \n",
+       "15  HI, TEXT, CALL OR WHATSAPP TO 0701379754 FOR S...   \n",
+       "16  RT @KeCamera: Canon EOS 80D DSLR Camera with 1...   \n",
+       "17  Sirui 50mm f/1.8 Anamorphic 1.33x Lens (MFT Mo...   \n",
+       "18  Canon EOS 80D DSLR Camera with 18-135mm Lens\\n...   \n",
+       "\n",
+       "                                                 text  \n",
+       "0   RT @mtaabuzz: Man killed after walking into gi...  \n",
+       "2   RT @Okello_Kay: @I___amFinest @Liberal_KE Afri...  \n",
+       "3   RT @FelicitysolarKE: Felicity Solar LiFeP04 BA...  \n",
+       "4   RT @alberto_januzaj: We can never forget his c...  \n",
+       "5   RT @ollyrutto: HELLO GUYS, TEXT, CALL OR WHATS...  \n",
+       "6   Digital Comrade is FREE and Open marketplace f...  \n",
+       "7   RT @ollyrutto: HI, TEXT, CALL OR WHATSAPP TO 0...  \n",
+       "9   https://t.co/LLQcJzehN7\\n#GintasticEaster\\n#Ro...  \n",
+       "11  RT @ItsNyambane: Robin Njogu was a consummate ...  \n",
+       "12  RT @TheTomorrowTech: Sirui 50mm f/1.8 Anamorph...  \n",
+       "14  RT @teddyeugene: To all those who have lost th...  \n",
+       "15  HI, TEXT, CALL OR WHATSAPP TO 0701379754 FOR S...  \n",
+       "16  RT @KeCamera: Canon EOS 80D DSLR Camera with 1...  \n",
+       "17  Sirui 50mm f/1.8 Anamorphic 1.33x Lens (MFT Mo...  \n",
+       "18  Canon EOS 80D DSLR Camera with 18-135mm Lens\\n...  "
+      ]
+     },
+     "execution_count": 39,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "tw_list = pd.DataFrame(tweet_list)\n",
+    "tw_list[\"text\"] = tw_list[0]\n",
+    "tw_list"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "id": "6119968f",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>0</th>\n",
+       "      <th>text</th>\n",
+       "      <th>polarity</th>\n",
+       "      <th>subjectivity</th>\n",
+       "      <th>sentiment</th>\n",
+       "      <th>neg</th>\n",
+       "      <th>neu</th>\n",
+       "      <th>pos</th>\n",
+       "      <th>compound</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>RT @mtaabuzz: Man killed after walking into gi...</td>\n",
+       "      <td>RT @mtaabuzz: Man killed after walking into gi...</td>\n",
+       "      <td>-0.200000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>negative</td>\n",
+       "      <td>0.170</td>\n",
+       "      <td>0.830</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>-0.6705</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>RT @Okello_Kay: @I___amFinest @Liberal_KE Afri...</td>\n",
+       "      <td>RT @Okello_Kay: @I___amFinest @Liberal_KE Afri...</td>\n",
+       "      <td>0.018750</td>\n",
+       "      <td>0.175000</td>\n",
+       "      <td>positive</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>0.829</td>\n",
+       "      <td>0.171</td>\n",
+       "      <td>0.5106</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>RT @FelicitysolarKE: Felicity Solar LiFeP04 BA...</td>\n",
+       "      <td>RT @FelicitysolarKE: Felicity Solar LiFeP04 BA...</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>neutral</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>1.000</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>0.0000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>RT @alberto_januzaj: We can never forget his c...</td>\n",
+       "      <td>RT @alberto_januzaj: We can never forget his c...</td>\n",
+       "      <td>0.200000</td>\n",
+       "      <td>0.300000</td>\n",
+       "      <td>positive</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>0.792</td>\n",
+       "      <td>0.208</td>\n",
+       "      <td>0.5371</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>RT @ollyrutto: HELLO GUYS, TEXT, CALL OR WHATS...</td>\n",
+       "      <td>RT @ollyrutto: HELLO GUYS, TEXT, CALL OR WHATS...</td>\n",
+       "      <td>0.500000</td>\n",
+       "      <td>0.819444</td>\n",
+       "      <td>positive</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>0.736</td>\n",
+       "      <td>0.264</td>\n",
+       "      <td>0.8001</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>Digital Comrade is FREE and Open marketplace f...</td>\n",
+       "      <td>Digital Comrade is FREE and Open marketplace f...</td>\n",
+       "      <td>0.133333</td>\n",
+       "      <td>0.433333</td>\n",
+       "      <td>positive</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>0.799</td>\n",
+       "      <td>0.201</td>\n",
+       "      <td>0.6166</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>RT @ollyrutto: HI, TEXT, CALL OR WHATSAPP TO 0...</td>\n",
+       "      <td>RT @ollyrutto: HI, TEXT, CALL OR WHATSAPP TO 0...</td>\n",
+       "      <td>0.333333</td>\n",
+       "      <td>0.568519</td>\n",
+       "      <td>positive</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>0.746</td>\n",
+       "      <td>0.254</td>\n",
+       "      <td>0.8001</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>https://t.co/LLQcJzehN7\\n#GintasticEaster\\n#Ro...</td>\n",
+       "      <td>https://t.co/LLQcJzehN7\\n#GintasticEaster\\n#Ro...</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>neutral</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>1.000</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>0.0000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>11</th>\n",
+       "      <td>RT @ItsNyambane: Robin Njogu was a consummate ...</td>\n",
+       "      <td>RT @ItsNyambane: Robin Njogu was a consummate ...</td>\n",
+       "      <td>0.375000</td>\n",
+       "      <td>0.750000</td>\n",
+       "      <td>neutral</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>1.000</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>0.0000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>12</th>\n",
+       "      <td>RT @TheTomorrowTech: Sirui 50mm f/1.8 Anamorph...</td>\n",
+       "      <td>RT @TheTomorrowTech: Sirui 50mm f/1.8 Anamorph...</td>\n",
+       "      <td>0.400000</td>\n",
+       "      <td>0.800000</td>\n",
+       "      <td>neutral</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>1.000</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>0.0000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>14</th>\n",
+       "      <td>RT @teddyeugene: To all those who have lost th...</td>\n",
+       "      <td>RT @teddyeugene: To all those who have lost th...</td>\n",
+       "      <td>0.377778</td>\n",
+       "      <td>0.677778</td>\n",
+       "      <td>positive</td>\n",
+       "      <td>0.077</td>\n",
+       "      <td>0.600</td>\n",
+       "      <td>0.323</td>\n",
+       "      <td>0.8126</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>15</th>\n",
+       "      <td>HI, TEXT, CALL OR WHATSAPP TO 0701379754 FOR S...</td>\n",
+       "      <td>HI, TEXT, CALL OR WHATSAPP TO 0701379754 FOR S...</td>\n",
+       "      <td>0.333333</td>\n",
+       "      <td>0.568519</td>\n",
+       "      <td>positive</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>0.726</td>\n",
+       "      <td>0.274</td>\n",
+       "      <td>0.8001</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>16</th>\n",
+       "      <td>RT @KeCamera: Canon EOS 80D DSLR Camera with 1...</td>\n",
+       "      <td>RT @KeCamera: Canon EOS 80D DSLR Camera with 1...</td>\n",
+       "      <td>0.400000</td>\n",
+       "      <td>0.800000</td>\n",
+       "      <td>neutral</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>1.000</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>0.0000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>17</th>\n",
+       "      <td>Sirui 50mm f/1.8 Anamorphic 1.33x Lens (MFT Mo...</td>\n",
+       "      <td>Sirui 50mm f/1.8 Anamorphic 1.33x Lens (MFT Mo...</td>\n",
+       "      <td>0.400000</td>\n",
+       "      <td>0.800000</td>\n",
+       "      <td>neutral</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>1.000</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>0.0000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>18</th>\n",
+       "      <td>Canon EOS 80D DSLR Camera with 18-135mm Lens\\n...</td>\n",
+       "      <td>Canon EOS 80D DSLR Camera with 18-135mm Lens\\n...</td>\n",
+       "      <td>0.400000</td>\n",
+       "      <td>0.800000</td>\n",
+       "      <td>neutral</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>1.000</td>\n",
+       "      <td>0.000</td>\n",
+       "      <td>0.0000</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                                                    0  \\\n",
+       "0   RT @mtaabuzz: Man killed after walking into gi...   \n",
+       "2   RT @Okello_Kay: @I___amFinest @Liberal_KE Afri...   \n",
+       "3   RT @FelicitysolarKE: Felicity Solar LiFeP04 BA...   \n",
+       "4   RT @alberto_januzaj: We can never forget his c...   \n",
+       "5   RT @ollyrutto: HELLO GUYS, TEXT, CALL OR WHATS...   \n",
+       "6   Digital Comrade is FREE and Open marketplace f...   \n",
+       "7   RT @ollyrutto: HI, TEXT, CALL OR WHATSAPP TO 0...   \n",
+       "9   https://t.co/LLQcJzehN7\\n#GintasticEaster\\n#Ro...   \n",
+       "11  RT @ItsNyambane: Robin Njogu was a consummate ...   \n",
+       "12  RT @TheTomorrowTech: Sirui 50mm f/1.8 Anamorph...   \n",
+       "14  RT @teddyeugene: To all those who have lost th...   \n",
+       "15  HI, TEXT, CALL OR WHATSAPP TO 0701379754 FOR S...   \n",
+       "16  RT @KeCamera: Canon EOS 80D DSLR Camera with 1...   \n",
+       "17  Sirui 50mm f/1.8 Anamorphic 1.33x Lens (MFT Mo...   \n",
+       "18  Canon EOS 80D DSLR Camera with 18-135mm Lens\\n...   \n",
+       "\n",
+       "                                                 text  polarity  subjectivity  \\\n",
+       "0   RT @mtaabuzz: Man killed after walking into gi... -0.200000      0.000000   \n",
+       "2   RT @Okello_Kay: @I___amFinest @Liberal_KE Afri...  0.018750      0.175000   \n",
+       "3   RT @FelicitysolarKE: Felicity Solar LiFeP04 BA...  0.000000      0.000000   \n",
+       "4   RT @alberto_januzaj: We can never forget his c...  0.200000      0.300000   \n",
+       "5   RT @ollyrutto: HELLO GUYS, TEXT, CALL OR WHATS...  0.500000      0.819444   \n",
+       "6   Digital Comrade is FREE and Open marketplace f...  0.133333      0.433333   \n",
+       "7   RT @ollyrutto: HI, TEXT, CALL OR WHATSAPP TO 0...  0.333333      0.568519   \n",
+       "9   https://t.co/LLQcJzehN7\\n#GintasticEaster\\n#Ro...  0.000000      0.000000   \n",
+       "11  RT @ItsNyambane: Robin Njogu was a consummate ...  0.375000      0.750000   \n",
+       "12  RT @TheTomorrowTech: Sirui 50mm f/1.8 Anamorph...  0.400000      0.800000   \n",
+       "14  RT @teddyeugene: To all those who have lost th...  0.377778      0.677778   \n",
+       "15  HI, TEXT, CALL OR WHATSAPP TO 0701379754 FOR S...  0.333333      0.568519   \n",
+       "16  RT @KeCamera: Canon EOS 80D DSLR Camera with 1...  0.400000      0.800000   \n",
+       "17  Sirui 50mm f/1.8 Anamorphic 1.33x Lens (MFT Mo...  0.400000      0.800000   \n",
+       "18  Canon EOS 80D DSLR Camera with 18-135mm Lens\\n...  0.400000      0.800000   \n",
+       "\n",
+       "   sentiment    neg    neu    pos  compound  \n",
+       "0   negative  0.170  0.830  0.000   -0.6705  \n",
+       "2   positive  0.000  0.829  0.171    0.5106  \n",
+       "3    neutral  0.000  1.000  0.000    0.0000  \n",
+       "4   positive  0.000  0.792  0.208    0.5371  \n",
+       "5   positive  0.000  0.736  0.264    0.8001  \n",
+       "6   positive  0.000  0.799  0.201    0.6166  \n",
+       "7   positive  0.000  0.746  0.254    0.8001  \n",
+       "9    neutral  0.000  1.000  0.000    0.0000  \n",
+       "11   neutral  0.000  1.000  0.000    0.0000  \n",
+       "12   neutral  0.000  1.000  0.000    0.0000  \n",
+       "14  positive  0.077  0.600  0.323    0.8126  \n",
+       "15  positive  0.000  0.726  0.274    0.8001  \n",
+       "16   neutral  0.000  1.000  0.000    0.0000  \n",
+       "17   neutral  0.000  1.000  0.000    0.0000  \n",
+       "18   neutral  0.000  1.000  0.000    0.0000  "
+      ]
+     },
+     "execution_count": 40,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#Calculating Negative, Positive, Neutral and Compound values\n",
+    "\n",
+    "tw_list[['polarity', 'subjectivity']] = tw_list['text'].apply(lambda Text: pd.Series(TextBlob(Text).sentiment))\n",
+    "for index, row in tw_list['text'].iteritems():\n",
+    "    score = SentimentIntensityAnalyzer().polarity_scores(row)\n",
+    "    neg = score['neg']\n",
+    "    neu = score['neu']\n",
+    "    pos = score['pos']\n",
+    "    comp = score['compound']\n",
+    "    if neg > pos:\n",
+    "        tw_list.loc[index, 'sentiment'] = \"negative\"\n",
+    "    elif pos > neg:\n",
+    "        tw_list.loc[index, 'sentiment'] = \"positive\"\n",
+    "    else:\n",
+    "        tw_list.loc[index, 'sentiment'] = \"neutral\"\n",
+    "    tw_list.loc[index, 'neg'] = neg\n",
+    "    tw_list.loc[index, 'neu'] = neu\n",
+    "    tw_list.loc[index, 'pos'] = pos\n",
+    "    tw_list.loc[index, 'compound'] = comp\n",
+    "\n",
+    "tw_list.head(50)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "id": "f667ca0c",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "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O+rUqVM+u3btCggPD48uKChQzzzzTIcvvviiRWRkZFR8fHyL+fPnt5o6dWqXjIwM3w4dOvQtLTVuiJ2dne3Trl27foWFhSopKanRsGHDwqOjo3vHxsb22rZtW13vbVju+++/b9K1a9fCqKioosDAQH399defXL58efOK861atar5tGnTMgBuv/32U5s2bQq22Wz4+/vrvLw8n7y8PB9/f3+dlJTU6PDhwwGjR492+tja8YmxXeITY2fGJ8Z+hXEy/A3jtnb3YtyD0YokXpMg4HLgMeA/QCZK/RelnkOpMSjVwtrwhLfy+Bp5meLiYr766qtmV111Vfb999/foX///qfXrVv3+8qVK4P/+Mc/dktOTt45b968dvPnzz9w1VVX5WVlZfkEBQXZjh0zft8SGBioH3rooSNbt25t8t577x0EmD9/fiuAVq1alfbu3fv0mjVrgseMGZOzdOnSkOHDh2c1atRI33HHHV0XLlx4oG/fvoXffvttkz//+c9dfvrpp901xbtt27amvXr1igoNDS1+4YUXUgcOHFiQmpoaUNbcAtCpU6eizZs3N624bHp6ekC3bt2KAPz9/WnatGlpenq63yOPPHL01ltv7RYYGGhbvHjx/rvvvrvznDlzDldc3hHMWvdAjH7mY4F+zlivg/lj3HX9IuA+QKPUDuA74COMm2gL4XAen8gLCwt9IiMjowAGDx6cc/fdd58YMGBA708++WQvwNixY3PuvPNOv5MnT/pcdNFFuX/7298633DDDSdvuummUz169Kh1W/qkSZNOLVmypMWYMWNyli1b1vKuu+46npWV5bNt27amkyZN6lE2X1FRkaqprIsvvjjvwIEDv4SEhNiWLl0aMmHChJ4HDhzYUZ/3X6Hc/O3btycDrF27tmloaGix1pprr722u5+fn3711VdTO3fuXHK+6yljXpS8AiNxj8Zo3/ZkCuOG2X2B/0Op3Rg3S36fc2/ULESD8fhEbt9GXpOnn346bdy4cVmff/55yLBhwyJXr169JygoqFbJ/Kabbsp88sknO6anp/vu2LEjaMyYMdnZ2dk+wcHBJbVdf5mWLVuWr3Py5MlZs2bN6nL06FG/zp07Fx0+fDigbNqhQ4fOqqGXCQ0NLdq/f39Ajx49iouLi8nNzfUNDQ0tT9A2m42nnnqq/YoVK/bFxcV1efHFFw/t2bMn4Lnn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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "labels = ['Positive ['+str(positive)+'%]' , 'Neutral ['+str(neutral)+'%]','Negative ['+str(negative)+'%]']\n",
+    "sizes = [positive, neutral, negative]\n",
+    "colors = ['yellowgreen', 'blue','red']\n",
+    "patches, texts = plt.pie(sizes,colors=colors, startangle=90)\n",
+    "plt.style.use('default')\n",
+    "plt.legend(labels)\n",
+    "plt.title(\"Sentiment Analysis Result for keyword=  \"+keyword+\"\" )\n",
+    "plt.axis('equal')\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "138ce9de",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
